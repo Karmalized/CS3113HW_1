@@ -26,7 +26,7 @@ shared_mem *total;
 /*once they do that they exit their process and after exiting their certain process each process terminates*/
 int process1(){
 for(int i = 0; i < 100000; i++){
-	total->value++;
+	(total->value) += 1;
 }
 printf("From Child Process 1: counter: %d.\n", total->value);
 return 0; 
@@ -34,7 +34,7 @@ return 0;
 
 int process2(){
 for(int i = 0; i < 100000; i++){
-	total->value++;
+	(total->value) += 1;
 }
 printf("From Child Process 2: counter: %d.\n", total->value);
 return 0;
@@ -42,7 +42,7 @@ return 0;
 
 int process3(){
 for(int i = 0; i < 100000; i++){
-	total->value++;
+	(total->value) += 1;
 }
 printf("From Child Process 3: counter: %d.\n", total->value);
 return 0;
@@ -50,7 +50,7 @@ return 0;
 
 int process4(){
 for(int i = 0; i < 200000; i++){
-	total->value++;
+	(total->value) += 1;
 }
 printf("From Child Process 4: counter: %d.\n", total->value);
 return 0;
@@ -68,9 +68,9 @@ int main(){
 		perror("shmget");
 		exit(1);}
 
-	if((total = (shared_mem *) shmat (shmid,shmadd,0)) == (shared_mem *)-1){
+	if((total = (shared_mem *) shmat(shmid,shmadd,0)) == (shared_mem *)-1){
 		perror("shmat");
-		exit(0);}
+		exit(1);}
 
 	/* shared memory is initialized to zero */
 	total->value = 0;
@@ -80,32 +80,31 @@ int main(){
 	if((pid1 = fork()) == 0){
 		process1();
 		exit(0);
-	} else {
-		waitpid(pid1, NULL, 0);
-		printf("Child with pid %d has just exited.\n", pid1);
 	}
+
 	if ((pid2 = fork()) == 0){
 		process2();
 		exit(0);
-	} else {
-		wait(NULL);
-		printf("child with PID: %d has just exited.\n", pid2);
 	}
 
 	if((pid3 = fork()) == 0){
 		process3();
 		exit(0);
-	} else {
-		wait(NULL);
-		printf("child with PID %d has just exited.\n", pid3);
 	}
+
 	if((pid4 = fork()) == 0){
 		process4();
 		exit(0);
-	} else {
-		wait(NULL);
-		printf("child with PID %d has just exited.\n", pid4);
 	}
+
+	waitpid(pid1,NULL,0);
+	printf("Child with PID %d has just exited.\n", pid1);
+	waitpid(pid2,NULL,0);
+	printf("Child with PID %d has just exited.\n", pid2);
+	waitpid(pid3,NULL,0);
+	printf("Child with PID %d has just exited.\n", pid3);
+	waitpid(pid4,NULL,0);
+	printf("Child with PID %d has just exited.\n", pid4);
 
 	/*after each process increments and terminates, we detach and remove shared memory here*/
 
