@@ -23,8 +23,8 @@ int value;
 
 shared_mem *total;
 
-/*all process are called in their own functions and they increment to by a certain amount as listed below*/
-/*once they do that they exit their process and after exiting their certain process each process terminates*/
+/*all process are called to their own functions and they increment by a certain amount as listed below*/
+/*once they increment up to their targeted value they exit their process function and after exiting their personal process function each process terminates*/
 int process1(){
 for(int i = 0; i < 100000; i++){
 	(total->value) += 1;
@@ -58,6 +58,7 @@ return 0;
 }
 
 int main(){
+	/*Program generates its IPC key and personal variables to setup the environment */
 	generated_key = ftok("./",'a');
 	int shmid, pid1, pid2, pid3, pid4, ID, status;
 	char * shmadd;
@@ -97,7 +98,7 @@ int main(){
 		process4();
 		exit(0);
 	}
-
+	/*Processes created at the behest of the parent run and the parent waits until the respective processes terminate*/
 	waitpid(pid1,NULL,0);
 	printf("Child with PID %d has just exited.\n", pid1);
 	waitpid(pid2,NULL,0);
