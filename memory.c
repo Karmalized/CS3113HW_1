@@ -1,5 +1,6 @@
-/* Name: Matthew Tran, Username: cs141 (cs141@cs141.cs.ourcloud.ou.edu)*/
+/* Name: Matthew Tran (ID: 113606493), Username: cs141 (cs141@cs141.cs.ourcloud.ou.edu)*/
 /* Github Username: Karmalized */
+/* OU 4X4: Tran0208 */
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
